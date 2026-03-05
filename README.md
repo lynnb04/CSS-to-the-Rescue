@@ -31,15 +31,11 @@ Mijn repo voor het vak CSS to the Rescue
   Feedbackgesprekken en ik ga verder werken.    
 
 ### Voortgang week 1
-Your assignment choice, and the options you select:    
-  CMD Artifaction    
-Which CSS techniques will you start with?    
-  Container queries, @layer, maybe: calc(), hsl(), transform()    
-Where do your (major) challenges lie?    
-  Working with random generation and making sure that it works correctly. Switching my mindset from designing the end result to designing the system that randomly makes the end result.    
+  Ik ga de opdracht CMD Artifaction doen. Ik wil hiervoor sowieso CSS nesting en @layer gebruiken.
+  Inspiratie tot nu toe:    
   <img width="270" height="480" alt="image" src="https://github.com/user-attachments/assets/c9cb16a7-817c-453e-8333-77b8f7b8c1a6" />
   <img width="270" height="480" alt="image" src="https://github.com/user-attachments/assets/70979d79-2262-41b0-9e8a-c083c13f1bb5" />  
-Notes:    
+Meeting notes:    
 - svgomg  
 - svg { { path fill: ...; }  }  
 - border: solid currentColor;  
@@ -50,10 +46,38 @@ Notes:
 
 ### Woensdag 04/03
 **Wat heb ik vandaag gedaan?**  
-  Geluisterd naar de Weekly Nerd talk, toen 3 workshops gedaan en daarna heb ik mijn mappenstructuur gemaakt. Ben begonnen met html en css. Ik had wat coole ideeën gevonden, waardoor ik geïnspireerd werd, in combinatie met de workshops. Ik wil elementen 3d animeren om een soort sterrenstelsel effect te krijgen, en hier randomness op toepassen.
+  Geluisterd naar de Weekly Nerd talk, toen 3 workshops gedaan en daarna heb ik mijn mappenstructuur gemaakt. Ben begonnen met html en css. Ik had wat coole ideeën gevonden, waardoor ik geïnspireerd werd, in combinatie met de workshops. Ik wil elementen 3d animeren om een soort sterrenstelsel effect te krijgen, en hier randomness op toepassen.    
 **Hoeveel tijd heeft me dat gekost?**  
-  Om 13:00 begon ik met de mappen enz, tot die tijd de talk en workshops. Een half uurtje gedaan over readme updaten.
-**Wat heb ik geleerd?** 
-  Vrijwel alles wat aan bod kwam bij de workshops. Ik vond steps() heel interessant en Nils liet zien hoe je een color randomizer maakt, dat vond ik ook heel vet. Dit was ook nieuw voor mij: animation-delay: calc(-2s / sibling-count() * sibling-index() );. 
-**Wat ga ik morgen doen?** 
-  Verder aan de code en in de middag het voortgangsgesprek doen.
+  Om 13:00 begon ik met de mappen enz, tot die tijd de talk en workshops. Een half uurtje gedaan over readme updaten.    
+**Wat heb ik geleerd?**  
+  Vrijwel alles wat aan bod kwam bij de workshops. Ik vond steps() heel interessant en Nils liet zien hoe je een color randomizer maakt, dat vond ik ook heel vet. Dit was ook nieuw voor mij: animation-delay: calc(-2s / sibling-count() * sibling-index() );.    
+**Wat ga ik morgen doen?**  
+  Verder aan de code en in de middag het voortgangsgesprek doen.    
+
+### Donderdag 05/03
+**Wat heb ik vandaag gedaan?**  
+  Ik heb de workshop over animeren gevolgd. Daarna ben ik gaan werken aan css, fonts in gitignore en toen de check-out.
+**Hoeveel tijd heeft me dat gekost?**  
+  Workshop duurde een uur. Ik heb tot kwart voor 3 gewerkt aan mijn code en daarna heb ik het voortgangsgesprek gedaan. Daarna heb ik mijn readme geüpdated. 
+**Wat heb ik geleerd?**  
+  Introductie van keyframe animaties en pixel art animation maken met steps(2, jump-none).
+**Wat ga ik morgen doen?**  
+  Voortgangsgesprek voor BT en aan mijn blog werken.
+
+### Voortgang week 2
+  Ik ga een zonnestelsel geïnspireerd iets maken wat op (seemingly) random manieren beweegt. Voor de planeten wil ik de CMD iconen gebruiken en deze zo aanpassen dat ze op planeten lijken. Het lijkt me ook leuk als je met een knop/refresh de iconen kan randomizen.    
+  Inspiratie: https://nl.pinterest.com/pin/624311567142357621/    
+
+  Meeting notes:    
+  - sibling index for random movement of the planets
+  - randomness on media query width
+  - add a line in the middle that you can't see from the front but is visible from the side
+  - pill shape: border-radius: 100vw;
+  - animato to/from: sometimes it is helpful to leave out from, if elements have different starting points and travel to the same point
+
+  - Show your progress (text, code and pictures):
+  - What went smoothly, and what was challenging?
+  - What experiments did you conduct that 'failed'?
+  - Do you have new insights into how to leverage the power of CSS (or not)?
+  - Incorporate changes to your initial plan:
+  - The challenges for next week:
