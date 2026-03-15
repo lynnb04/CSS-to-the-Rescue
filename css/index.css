@@ -17,11 +17,11 @@
     --text: var(--cmd-zwart);
     --ring: var(--cmd-geel);
     --accent: var(--cmd-zwart);
-
-    @font-face {
-        font-family: 'OpenSans-Regular'
-        src: url('../fonts/OpenSans-Regular.ttf');
 }
+
+@font-face {
+    font-family: 'OpenSans-Regular';
+    src: url('../fonts/OpenSans-Regular.ttf');
 }
 
 /* dark theme */
