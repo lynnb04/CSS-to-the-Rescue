@@ -1,0 +1,104 @@
+:root {
+    color-scheme: light dark;
+
+    /* basiskleuren */
+    --cmd-zwart: #000;
+    --cmd-wit: #fff;
+    --cmd-geel: #FFF021;
+    --cmd-pepermunt: #E0F5DF;
+    --cmd-papaya: #FAF0D7;
+    --cmd-lavendel: #F0EBF0;
+
+    /* light theme */
+    --bg: var(--cmd-wit);
+    --text: var(--cmd-zwart);
+    --ring: var(--cmd-geel);
+    --accent: var(--cmd-zwart);
+}
+
+@font-face {
+    font-family: 'OpenSans-Regular';
+    src: url('../fonts/OpenSans-Regular.ttf');
+}
+
+/* dark theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: var(--cmd-zwart);
+        --text: var(--cmd-wit);
+        --ring: var(--cmd-wit);
+        --accent: var(--cmd-geel);
+    }
+}
+
+
+
+/* /////////////// */
+/* general styling */
+/* /////////////// */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    background-color: black;
+}
+
+
+
+/* //////// */
+/* bg stars */
+/* //////// */
+
+section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+div {
+    position: relative;
+    display: flex;
+}
+
+div > span {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    background: #FFF021;
+    margin: 0 4px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 10px #FFF02144, 0 0 50px #FFF021, 0 0 100px #FFF021;
+    animation: --animate 15s linear infinite;
+    animation-duration: calc(150s / var(--i));
+}
+
+div > span:nth-child(even) {
+    background: #FAF0D7;
+    box-shadow: 0 0 0 10px #FAF0D744, 0 0 10px #FAF0D7, 0 0 100px #FAF0D7;
+
+}
+
+@keyframes --animate {
+    0% {
+        transform: translateY(100vh) scale(0);
+    }
+
+    100% {
+        transform: translateY(-10vh) scale(1);
+    }
+}
+
+
+
+/* if inline is not allowed: */
+/* div {
+    &:nth-child(1): { --i: 1; }
+    &:nth-child(2): { --i: 2; }
+    &:nth-child(3): { --i: 3; }
+} */
+/* source: https://css-tricks.com/3d-layered-text-the-basics/ */

@@ -1,0 +1,1412 @@
+/* //////////////// */
+/* algemene styling */
+/* //////////////// */
+
+/* laagvolgorde: later = hogere prioriteit */
+/* bron: https://developer.mozilla.org/en-US/docs/Web/CSS/@layer */
+@layer basis, layout, cellen, patronen, animaties, typografie, interactie;
+
+/* lokale fonts uit de fonts map */
+@font-face {
+    font-family: 'Open Sans';
+    src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('fonts/OpenSans-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('fonts/OpenSans-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('fonts/OpenSans-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+:root {
+    /* cmd kleurenpalet */
+    --cmd-zwart: #000;
+    --cmd-wit: #fff;
+    --cmd-geel: #FFF021;
+    --cmd-pepermunt: #E0F5DF;
+    --cmd-papaya: #FAF0D7;
+    --cmd-lavendel: #F0EBF0;
+
+    /* variabelen — achtergrond, accent en tekst */
+    --bg: var(--cmd-zwart);
+    --accent: var(--cmd-geel);
+    --text: var(--cmd-wit);
+
+    --font-mono: 'Open Sans', sans-serif;
+    --font-display: 'Open Sans', sans-serif;
+
+    /* celgrootte */
+    --cell-size: 44px;
+}
+
+/* reset — margins en padding eraf, border-box zodat maten kloppen */
+@layer basis {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--font-mono);
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+}
+
+
+
+/* ////////////// */
+/* rgb-schakelaar */
+/* ////////////// */
+
+@layer interactie {
+
+    header label input[type="checkbox"] {
+        display: none;
+    }
+
+    header label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        color: var(--cmd-wit);
+        opacity: 0.5;
+        cursor: pointer;
+        padding: 0.4rem 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+        transition: opacity 0.2s ease, border-color 0.2s ease;
+
+        &:hover {
+            opacity: 0.8;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+    }
+
+    header label>span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        flex-shrink: 0;
+        /* stip mag niet krimpen */
+        transition: background 0.3s ease;
+    }
+
+    main:has(input:checked) header label {
+        border-color: transparent;
+        background: linear-gradient(90deg,
+                hsl(0, 100%, 60%), hsl(60, 100%, 60%), hsl(120, 100%, 60%),
+                hsl(180, 100%, 60%), hsl(240, 100%, 60%), hsl(300, 100%, 60%),
+                hsl(360, 100%, 60%));
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: rgb-label-shift 3s linear infinite;
+    }
+
+    main:has(input:checked) header label>span {
+        animation: rgb-dot-spin 2s linear infinite;
+        background: hsl(0, 100%, 60%);
+    }
+
+    @keyframes rgb-hue-cycle {
+        from {
+            filter: hue-rotate(0deg);
+        }
+
+        to {
+            filter: hue-rotate(360deg);
+        }
+    }
+
+    @keyframes rgb-dot-spin {
+        0% {
+            background: hsl(0, 100%, 60%);
+        }
+
+        16% {
+            background: hsl(60, 100%, 60%);
+        }
+
+        33% {
+            background: hsl(120, 100%, 60%);
+        }
+
+        50% {
+            background: hsl(180, 100%, 60%);
+        }
+
+        66% {
+            background: hsl(240, 100%, 60%);
+        }
+
+        83% {
+            background: hsl(300, 100%, 60%);
+        }
+
+        100% {
+            background: hsl(360, 100%, 60%);
+        }
+    }
+
+    @keyframes rgb-label-shift {
+        from {
+            filter: hue-rotate(0deg);
+        }
+
+        to {
+            filter: hue-rotate(360deg);
+        }
+    }
+
+    main:has(input:checked) section>div>div:first-child {
+        animation: rgb-hue-cycle 4s linear infinite;
+    }
+}
+
+/* einde @layer interactie (rgb) */
+
+
+/* paginastructuur — main als flex-kolom, header bovenaan, grid gecentreerd */
+@layer layout {
+    main {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 2.5rem 3rem;
+        position: relative;
+
+        >header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-inline: 2rem;
+
+            >p {
+                font-family: var(--font-display);
+                font-weight: 900;
+                font-size: 1.2rem;
+                color: var(--cmd-geel);
+            }
+        }
+
+        >section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            >div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2.5rem;
+            }
+        }
+    }
+}
+
+/* einde @layer layout (paginastructuur) */
+
+
+
+/* //// */
+/* grid */
+/* //// */
+
+@layer cellen {
+
+    /* 8 bij 8 cellen, gap van 7px ertussen */
+    /* vaste kolom- en rijgroottes zodat het echt vierkant is */
+
+    section>div>div:first-child {
+        display: grid;
+        grid-template-columns: repeat(8, var(--cell-size));
+        grid-template-rows: repeat(8, var(--cell-size));
+        gap: 10px;
+        position: relative;
+    }
+
+
+
+    /* ///////// */
+    /* basis cel */
+    /* ///////// */
+
+    /* elke div in het grid */
+    /* aspect-ratio zorgt dat 'ie vierkant blijft */
+
+    section>div>div:first-child>div {
+        width: var(--cell-size);
+        height: var(--cell-size);
+        aspect-ratio: 1 / 1;
+        position: relative;
+        overflow: visible;
+        border-radius: 0;
+        --cell-color: var(--cmd-geel);
+    }
+
+    /* kleurverdeling: cicada principe met priemgetallen */
+    /* elke cel krijgt een kleur op basis van nth-child */
+    /* priemgetallen overlappen bijna nooit, waardoor het patroon random lijkt */
+
+    section>div>div:first-child>div:nth-child(2n) {
+        --cell-color: var(--cmd-geel);
+    }
+
+    section>div>div:first-child>div:nth-child(3n) {
+        --cell-color: var(--cmd-papaya);
+    }
+
+    section>div>div:first-child>div:nth-child(5n) {
+        --cell-color: var(--cmd-pepermunt);
+    }
+
+    section>div>div:first-child>div:nth-child(7n) {
+        --cell-color: var(--cmd-geel);
+    }
+
+    section>div>div:first-child>div:nth-child(11n) {
+        --cell-color: var(--cmd-zwart);
+    }
+
+    section>div>div:first-child>div:nth-child(13n) {
+        --cell-color: var(--cmd-lavendel);
+    }
+
+    section>div>div:first-child>div:nth-child(17n) {
+        --cell-color: var(--cmd-papaya);
+    }
+
+    section>div>div:first-child>div:nth-child(19n) {
+        --cell-color: var(--cmd-pepermunt);
+    }
+
+    section>div>div:first-child>div:nth-child(23n) {
+        --cell-color: var(--cmd-wit);
+    }
+
+    section>div>div:first-child>div:nth-child(29n) {
+        --cell-color: var(--cmd-geel);
+    }
+
+    /* celopvulling: ::before vult de cel met de celkleur */
+    /* kleine inset box-shadow geeft een subtiele rand */
+    section>div>div:first-child>div::before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: var(--cell-color);
+    }
+
+}
+
+/* einde @layer cellen */
+
+
+
+/* ////////////////////////////////// */
+/* patroon-overlays (cicada principe) */
+/* ////////////////////////////////// */
+
+@layer patronen {
+
+    /* bron: https://www.sitepoint.com/the-cicada-principle-and-why-it-matters-to-web-designers/ */
+    /* elke nth cel krijgt een ander achtergrondpatroon of icoon */
+    /* door priemgetallen te combineren zie je nooit exact hetzelfde */
+
+    /* iconen op cellen die geen css-patroon hebben */
+    /* cicada principe: priemgetallen zodat iconen niet op vaste plekken herhalen */
+    section>div>div:first-child>div:nth-child(2n)::before {
+        background-image: url('icons/rocket.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    section>div>div:first-child>div:nth-child(3n)::before {
+        background-image: url('icons/command.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    section>div>div:first-child>div:nth-child(5n)::before {
+        background-image: url('icons/globe.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    /* css-patronen: deze overschrijven de iconen op 7n en 11n */
+    section>div>div:first-child>div:nth-child(7n)::before {
+        --_g: var(--cmd-geel) 0% 5%, var(--cmd-zwart) 6% 15%, var(--cmd-geel) 16% 25%, var(--cmd-zwart) 26% 35%,
+            var(--cmd-pepermunt) 36% 45%, var(--cmd-zwart) 46% 55%, var(--cmd-pepermunt) 56% 65%,
+            var(--cmd-zwart) 66% 75%, var(--cmd-papaya) 76% 85%, var(--cmd-zwart) 86% 95%, #0000 96%;
+        background:
+            radial-gradient(50% 50% at 100% 0, var(--_g)),
+            radial-gradient(50% 50% at 0 100%, var(--_g)),
+            radial-gradient(50% 50%, var(--_g)),
+            radial-gradient(50% 50%, var(--_g)) calc(var(--cell-size) / 2) calc(var(--cell-size) / 2) var(--cmd-geel);
+        background-size: var(--cell-size) var(--cell-size);
+    }
+
+    section>div>div:first-child>div:nth-child(11n)::before {
+        background:
+            radial-gradient(var(--cmd-geel) 24%, #0000 25%),
+            radial-gradient(var(--cmd-pepermunt) 30%, #0000 32%) calc(var(--cell-size) / 2) calc(var(--cell-size) / 2),
+            repeating-conic-gradient(from 30deg, var(--cmd-papaya) 0 30deg, var(--cmd-geel) 0 25%);
+        background-size: var(--cell-size) var(--cell-size);
+    }
+
+    /* meer iconen via hogere priemgetallen */
+    section>div>div:first-child>div:nth-child(13n)::before {
+        background-image: url('icons/fingerprint.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    section>div>div:first-child>div:nth-child(17n)::before {
+        background-image: url('icons/cat.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    section>div>div:first-child>div:nth-child(19n)::before {
+        background-image: url('icons/unicorn.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    section>div>div:first-child>div:nth-child(23n)::before {
+        background-image: url('icons/coffee.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+    section>div>div:first-child>div:nth-child(29n)::before {
+        background-image: url('icons/fire.png');
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: var(--cell-color);
+    }
+
+}
+
+/* einde @layer patronen */
+
+
+
+/* ////////////////////////// */
+/* animaties voor alle cellen */
+/* ////////////////////////// */
+
+@layer animaties {
+
+    /* elke cel krijgt meerdere animations */
+    /* cicada principe: de duraties zijn priemgetallen zodat ze heel lang niet overeenkomen, ziet er generatief uit */
+    section>div>div:first-child>div {
+        animation: spin-slow 12s linear infinite;
+    }
+
+    section>div>div:first-child>div:nth-child(1n) {
+        animation: spin-slow 12.0s linear infinite, pulse-cell 3.7s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -0.0s, -0.5s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(2n) {
+        animation: spin-slow 7.3s linear infinite, pulse-cell 2.9s ease-in-out infinite alternate, glitch-b 48s steps(1) infinite;
+        animation-delay: -0.4s, -1.1s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(3n) {
+        animation: spin-slow 17.1s linear infinite, pulse-cell 5.3s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -1.2s, -0.7s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(4n) {
+        animation: spin-slow 9.7s linear infinite, pulse-cell 4.1s ease-in-out infinite alternate, glitch-d 48s steps(1) infinite;
+        animation-delay: -2.0s, -2.3s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(5n) {
+        animation: spin-fast 11.7s linear infinite, pulse-big 7.9s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -3.1s, -1.9s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(6n) {
+        animation: spin-slow 14.3s linear infinite, pulse-cell 3.1s ease-in-out infinite alternate, glitch-b 48s steps(1) infinite;
+        animation-delay: -0.6s, -0.3s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(7n) {
+        animation: spin-rev 8.3s linear infinite, pulse-big 6.1s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -4.0s, -3.7s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(8n) {
+        animation: spin-slow 19.9s linear infinite, pulse-cell 2.3s ease-in-out infinite alternate, glitch-d 48s steps(1) infinite;
+        animation-delay: -1.5s, -0.9s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(9n) {
+        animation: spin-fast 6.7s linear infinite, pulse-cell 4.7s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -0.8s, -1.3s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(10n) {
+        animation: spin-rev 22.0s linear infinite, pulse-big 8.9s ease-in-out infinite alternate, glitch-b 48s steps(1) infinite;
+        animation-delay: -5.0s, -2.7s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(11n) {
+        animation: spin-fast 5.1s linear infinite, pulse-cell 1.9s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -0.2s, -0.4s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(12n) {
+        animation: spin-slow 28.0s linear infinite, pulse-big 11.3s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -6.0s, -4.1s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(13n) {
+        animation: spin-rev 3.7s linear infinite, pulse-cell 5.9s ease-in-out infinite alternate, glitch-d 48s steps(1) infinite;
+        animation-delay: -1.8s, -2.1s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(14n) {
+        animation: spin-slow 16.1s linear infinite, pulse-big 9.1s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -3.5s, -5.5s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(15n) {
+        animation: spin-fast 4.3s linear infinite, pulse-cell 3.3s ease-in-out infinite alternate, glitch-b 48s steps(1) infinite;
+        animation-delay: -0.9s, -1.7s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(16n) {
+        animation: spin-rev 13.0s linear infinite, pulse-big 6.7s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -7.0s, -3.3s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(17n) {
+        animation: spin-slow 21.7s linear infinite, pulse-cell 4.9s ease-in-out infinite alternate, glitch-d 48s steps(1) infinite;
+        animation-delay: -2.3s, -1.5s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(18n) {
+        animation: spin-fast 10.0s linear infinite, pulse-big 7.3s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -4.5s, -6.7s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(19n) {
+        animation: spin-rev 25.0s linear infinite, pulse-cell 12.1s ease-in-out infinite alternate, glitch-b 48s steps(1) infinite;
+        animation-delay: -8.0s, -2.9s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(20n) {
+        animation: spin-slow 11.0s linear infinite, pulse-big 5.7s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -1.1s, -0.8s, calc(var(--i) * -0.75s);
+    }
+
+
+
+    /* ///////////////// */
+    /* rotatie-varianten */
+    /* ///////////////// */
+
+    /* langzaam, snel, en omgekeerd */
+    /* spin-slow en spin-fast doen eigenlijk hetzelfde, maar kunnen een andere duur meekrijgen via de animation-property */
+
+    @keyframes spin-slow {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin-fast {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin-rev {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(-360deg);
+        }
+    }
+
+
+
+    /* ////////////////////// */
+    /* schaal-pulse varianten */
+    /* ////////////////////// */
+
+    /* pulse-cell is subtiel, pulse-big overdreven */
+    /* de opacity daalt mee */
+    @keyframes pulse-cell {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        40% {
+            transform: scale(0.82);
+            opacity: 0.75;
+        }
+
+        70% {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse-big {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        30% {
+            transform: scale(1.2);
+            opacity: 0.9;
+        }
+
+        60% {
+            transform: scale(0.75);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+}
+
+/* einde @layer animaties (rotatie/pulse) */
+
+/* hover: animatie pauzeert en de cel schaalt op */
+@layer interactie {
+    section>div>div:first-child>div:hover {
+        animation-play-state: paused;
+    }
+
+    section>div>div:first-child>div:hover::before {
+        box-shadow: 0 0 0 3px var(--cmd-zwart), 0 0 20px rgba(0, 0, 0, 0.35);
+        transform: scale(1.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+}
+
+/* einde @layer interactie (hover) */
+
+
+
+/* //////////////////////////////////////// */
+/* titel en info gecentreerd onder het grid */
+/* //////////////////////////////////////// */
+
+@layer typografie {
+
+    /* ::before en ::after worden gebruikt voor het glitch-effect op de h1 */
+    section>div>div:last-child {
+        text-align: center;
+    }
+
+    section>div>div:last-child>h1 {
+        font-family: var(--font-display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        position: relative;
+        color: var(--cmd-wit);
+
+        &::before,
+        &::after {
+            content: attr(data-text);
+            /* haalt de waarde van het html element op zodat de ::before en ::after hetzelfde tonen, bron: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/attr */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+        }
+
+        &::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--cmd-geel);
+            clip-path: inset(45% 0 44% 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        &::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--cmd-pepermunt);
+            clip-path: inset(80% 0 0 0);
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
+    }
+
+    section>div>div:last-child>p {
+        font-size: 0.65rem;
+        opacity: 0.5;
+        margin-top: 0.5rem;
+        color: var(--cmd-wit);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    @keyframes glitch-anim {
+        0% {
+            clip-path: inset(10% 0 80% 0);
+        }
+
+        20% {
+            clip-path: inset(50% 0 10% 0);
+        }
+
+        40% {
+            clip-path: inset(80% 0 20% 0);
+        }
+
+        60% {
+            clip-path: inset(30% 0 60% 0);
+        }
+
+        80% {
+            clip-path: inset(60% 0 10% 0);
+        }
+
+        100% {
+            clip-path: inset(20% 0 80% 0);
+        }
+    }
+
+    @keyframes glitch-anim-2 {
+        0% {
+            clip-path: inset(80% 0 10% 0);
+        }
+
+        100% {
+            clip-path: inset(10% 0 80% 0);
+        }
+    }
+
+}
+
+/* einde @layer typografie */
+
+
+
+/* ////// */
+/* footer */
+/* ////// */
+
+@layer layout {
+
+    footer {
+        display: flex;
+        justify-content: center;
+        font-size: 0.6rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 1.5rem;
+        padding-inline: 2rem;
+        color: var(--cmd-wit);
+        opacity: 0.6;
+    }
+}
+
+/* einde @layer layout (footer) */
+
+/* /////////// */
+/* glitch swap */
+/* /////////// */
+
+@layer animaties {
+    /* 48s cyclus, 8 segmenten van elk 12.5% */
+    /* elk segment: cel staat lang stil (~10%), dan een snelle reeks order-wissels (~2%) die eruit ziet als een glitch. de delay is calc(var(--i) * -0.75s), zo zijn alle 64 cellen gelijkmatig verdeeld over de cyclus: 64 × 0.75 = 48s. op elk moment zitten cellen op 8 verschillende posities, dat zorgt voor patroonwisseling zonder js */
+
+    @keyframes glitch-a {
+
+        0%,
+        10% {
+            order: 1
+        }
+
+        11% {
+            order: 48
+        }
+
+        11.5% {
+            order: 32
+        }
+
+        12% {
+            order: 60
+        }
+
+        12.5%,
+        22.5% {
+            order: 9
+        }
+
+        23.5% {
+            order: 40
+        }
+
+        24% {
+            order: 56
+        }
+
+        24.5% {
+            order: 17
+        }
+
+        25%,
+        35% {
+            order: 37
+        }
+
+        36% {
+            order: 64
+        }
+
+        36.5% {
+            order: 13
+        }
+
+        37% {
+            order: 45
+        }
+
+        37.5%,
+        47.5% {
+            order: 28
+        }
+
+        48.5% {
+            order: 2
+        }
+
+        49% {
+            order: 61
+        }
+
+        49.5% {
+            order: 19
+        }
+
+        50%,
+        60% {
+            order: 53
+        }
+
+        61% {
+            order: 31
+        }
+
+        61.5% {
+            order: 7
+        }
+
+        62% {
+            order: 46
+        }
+
+        62.5%,
+        72.5% {
+            order: 22
+        }
+
+        73.5% {
+            order: 59
+        }
+
+        74% {
+            order: 35
+        }
+
+        74.5% {
+            order: 51
+        }
+
+        75%,
+        85% {
+            order: 6
+        }
+
+        86% {
+            order: 43
+        }
+
+        86.5% {
+            order: 20
+        }
+
+        87% {
+            order: 57
+        }
+
+        87.5%,
+        97.5% {
+            order: 50
+        }
+
+        98.5% {
+            order: 29
+        }
+
+        99% {
+            order: 11
+        }
+
+        99.5% {
+            order: 38
+        }
+
+        100% {
+            order: 1
+        }
+    }
+
+    @keyframes glitch-b {
+
+        0%,
+        10% {
+            order: 5
+        }
+
+        11% {
+            order: 44
+        }
+
+        11.5% {
+            order: 62
+        }
+
+        12% {
+            order: 21
+        }
+
+        12.5%,
+        22.5% {
+            order: 16
+        }
+
+        23.5% {
+            order: 57
+        }
+
+        24% {
+            order: 33
+        }
+
+        24.5% {
+            order: 8
+        }
+
+        25%,
+        35% {
+            order: 41
+        }
+
+        36% {
+            order: 26
+        }
+
+        36.5% {
+            order: 52
+        }
+
+        37% {
+            order: 14
+        }
+
+        37.5%,
+        47.5% {
+            order: 30
+        }
+
+        48.5% {
+            order: 3
+        }
+
+        49% {
+            order: 63
+        }
+
+        49.5% {
+            order: 47
+        }
+
+        50%,
+        60% {
+            order: 18
+        }
+
+        61% {
+            order: 55
+        }
+
+        61.5% {
+            order: 39
+        }
+
+        62% {
+            order: 24
+        }
+
+        62.5%,
+        72.5% {
+            order: 34
+        }
+
+        73.5% {
+            order: 10
+        }
+
+        74% {
+            order: 58
+        }
+
+        74.5% {
+            order: 42
+        }
+
+        75%,
+        85% {
+            order: 23
+        }
+
+        86% {
+            order: 49
+        }
+
+        86.5% {
+            order: 36
+        }
+
+        87% {
+            order: 15
+        }
+
+        87.5%,
+        97.5% {
+            order: 60
+        }
+
+        98.5% {
+            order: 27
+        }
+
+        99% {
+            order: 4
+        }
+
+        99.5% {
+            order: 48
+        }
+
+        100% {
+            order: 5
+        }
+    }
+
+    @keyframes glitch-c {
+
+        0%,
+        10% {
+            order: 11
+        }
+
+        11% {
+            order: 50
+        }
+
+        11.5% {
+            order: 36
+        }
+
+        12% {
+            order: 3
+        }
+
+        12.5%,
+        22.5% {
+            order: 27
+        }
+
+        23.5% {
+            order: 64
+        }
+
+        24% {
+            order: 42
+        }
+
+        24.5% {
+            order: 19
+        }
+
+        25%,
+        35% {
+            order: 54
+        }
+
+        36% {
+            order: 7
+        }
+
+        36.5% {
+            order: 25
+        }
+
+        37% {
+            order: 61
+        }
+
+        37.5%,
+        47.5% {
+            order: 14
+        }
+
+        48.5% {
+            order: 38
+        }
+
+        49% {
+            order: 56
+        }
+
+        49.5% {
+            order: 31
+        }
+
+        50%,
+        60% {
+            order: 46
+        }
+
+        61% {
+            order: 2
+        }
+
+        61.5% {
+            order: 63
+        }
+
+        62% {
+            order: 17
+        }
+
+        62.5%,
+        72.5% {
+            order: 33
+        }
+
+        73.5% {
+            order: 48
+        }
+
+        74% {
+            order: 20
+        }
+
+        74.5% {
+            order: 58
+        }
+
+        75%,
+        85% {
+            order: 4
+        }
+
+        86% {
+            order: 29
+        }
+
+        86.5% {
+            order: 53
+        }
+
+        87% {
+            order: 40
+        }
+
+        87.5%,
+        97.5% {
+            order: 22
+        }
+
+        98.5% {
+            order: 47
+        }
+
+        99% {
+            order: 9
+        }
+
+        99.5% {
+            order: 35
+        }
+
+        100% {
+            order: 11
+        }
+    }
+
+    @keyframes glitch-d {
+
+        0%,
+        10% {
+            order: 7
+        }
+
+        11% {
+            order: 55
+        }
+
+        11.5% {
+            order: 23
+        }
+
+        12% {
+            order: 47
+        }
+
+        12.5%,
+        22.5% {
+            order: 31
+        }
+
+        23.5% {
+            order: 15
+        }
+
+        24% {
+            order: 63
+        }
+
+        24.5% {
+            order: 39
+        }
+
+        25%,
+        35% {
+            order: 51
+        }
+
+        36% {
+            order: 18
+        }
+
+        36.5% {
+            order: 34
+        }
+
+        37% {
+            order: 6
+        }
+
+        37.5%,
+        47.5% {
+            order: 43
+        }
+
+        48.5% {
+            order: 28
+        }
+
+        49% {
+            order: 60
+        }
+
+        49.5% {
+            order: 12
+        }
+
+        50%,
+        60% {
+            order: 45
+        }
+
+        61% {
+            order: 1
+        }
+
+        61.5% {
+            order: 59
+        }
+
+        62% {
+            order: 26
+        }
+
+        62.5%,
+        72.5% {
+            order: 38
+        }
+
+        73.5% {
+            order: 52
+        }
+
+        74% {
+            order: 16
+        }
+
+        74.5% {
+            order: 44
+        }
+
+        75%,
+        85% {
+            order: 30
+        }
+
+        86% {
+            order: 57
+        }
+
+        86.5% {
+            order: 10
+        }
+
+        87% {
+            order: 24
+        }
+
+        87.5%,
+        97.5% {
+            order: 62
+        }
+
+        98.5% {
+            order: 37
+        }
+
+        99% {
+            order: 49
+        }
+
+        99.5% {
+            order: 21
+        }
+
+        100% {
+            order: 7
+        }
+    }
+
+    /* zelf bedacht, maar ik heb de grote opzet uit laten schrijven door chatgpt en het toen zelf aangepast. prompt: schrijf in css een 48s cyclus, 8 segmenten van elk 12.5%. elk segment: cel staat lang stil (~10%), dan een snelle reeks order-wissels (~2%) die eruit ziet als een glitch. de delay is calc(var(--i) * -0.75s), zo zijn alle 64 cellen gelijkmatig verdeeld over de cyclus: 64 × 0.75 = 48s. */
+    /* schrijven kan korter, maar ik vind dit overzichtelijker lezen dus ik heb het zo gelaten */
+
+
+    /* meer animaties */
+    section>div>div:first-child>div:nth-child(5n) {
+        animation: spin-fast 11.7s linear infinite, pulse-big 7.9s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -3.1s, -1.9s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(7n) {
+        animation: spin-rev 8.3s linear infinite, pulse-big 6.1s ease-in-out infinite alternate, glitch-d 48s steps(1) infinite;
+        animation-delay: -4.0s, -3.7s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(11n) {
+        animation: spin-fast 5.1s linear infinite, pulse-cell 1.9s ease-in-out infinite alternate, glitch-a 48s steps(1) infinite;
+        animation-delay: -0.2s, -0.4s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(13n) {
+        animation: spin-rev 3.7s linear infinite, pulse-cell 5.9s ease-in-out infinite alternate, glitch-b 48s steps(1) infinite;
+        animation-delay: -1.8s, -2.1s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(17n) {
+        animation: spin-slow 21.7s linear infinite, pulse-cell 4.9s ease-in-out infinite alternate, glitch-c 48s steps(1) infinite;
+        animation-delay: -2.3s, -1.5s, calc(var(--i) * -0.75s);
+    }
+
+    section>div>div:first-child>div:nth-child(19n) {
+        animation: spin-rev 25.0s linear infinite, pulse-cell 12.1s ease-in-out infinite alternate, glitch-d 48s steps(1) infinite;
+        animation-delay: -8.0s, -2.9s, calc(var(--i) * -0.75s);
+    }
+}
+
+/* einde @layer animaties (glitch) */
+
+
+
+/* ////////// */
+/* responsive */
+/* ////////// */
+
+/* op kleine schermen worden de cellen kleiner en de titel iets compacter zodat alles nog past */
+@media (max-width: 450px) {
+    :root {
+        --cell-size: 24px;
+    }
+
+    section>div>div:last-child>h1 {
+        font-size: 1.6rem;
+    }
+}
